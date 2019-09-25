@@ -1,17 +1,17 @@
 class Category < ApplicationRecord
   has_many :line_items
 
-  def month_average
-    set = []
+  scope :expenses, -> { where.not(name: ["Mortgage", "Income", "Reimbursements"]) }
 
-    line_items.group_by(&:month_year).each do |_, items|
-      set << items.sum(&:amount)
+  def average(range = 12)
+    range ||= 12
+
+    months = LineItem.months.last(range.to_i)
+
+    set = months.map do |month|
+      line_items.where(month_year: month).sum(&:amount)
     end
 
-    if set.any?
-      set.sum / LineItem.months.count
-    else
-      0
-    end
+    (set.sum / set.count).round(2)
   end
 end

@@ -1,0 +1,26 @@
+<%= link_to "<- Back", root_url %>
+
+<br>
+<br>
+
+<div>Average Range</div>
+<ul style="margin: 0; padding: 2px 17px;">
+  <li><%= link_to "12 month", range: 12 %></li>
+  <li><%= link_to "6 month", range: 6 %></li>
+</ul>
+
+<%= line_chart(chart_data)%>
+
+<table>
+  <tr>
+    <td>Average</td>
+    <td><%= category.average(range).abs %></td>
+  </tr>
+
+  <% LineItem.months.reverse.each do |month| %>
+    <tr>
+      <td><%= month %></td>
+      <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,30 +1,27 @@
-<table>
-  <tr>
-    <td>Category</td>
-    <td>Avg Amount</td>
-  </tr>
+<div>Average Range</div>
+<ul style="margin: 0; padding: 2px 17px;">
+  <li><%= link_to "12 month", range: 12 %></li>
+  <li><%= link_to "6 month", range: 6 %></li>
+</ul>
 
-  <% Category.all.each do |category| %>
-    <tr>
-      <td><%= category.name || "Unknown" %></td>
-      <td><%= category.month_average.round(2) %></td>
-    </tr>
-  <% end %>
-</table>
-
-<br>
-<br>
+<%= column_chart(chart_data)%>
 
 <table>
   <tr>
     <td>Category</td>
-    <td>Avg Amount</td>
+    <td>Average</td>
+    <% LineItem.months.last(3).each do |month| %>
+      <td><%= month %></td>
+    <% end %>
   </tr>
 
-  <% Category.all.each do |category| %>
+  <% Category.expenses.each do |category| %>
     <tr>
-      <td><%= category.name || "Unknown" %></td>
-      <td><%= category.month_average.round(2) %></td>
+      <td><%= link_to(category.name || "Unknown", category) %></td>
+      <td><%= category.average(range).abs %></td>
+      <% LineItem.months.last(3).each do |month| %>
+        <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
+      <% end %>
     </tr>
   <% end %>
 </table>
