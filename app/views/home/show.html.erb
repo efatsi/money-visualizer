@@ -13,6 +13,7 @@
     <% LineItem.months.last(3).each do |month| %>
       <td><%= month %></td>
     <% end %>
+    <td>Variation</td>
   </tr>
 
   <% Category.expenses.each do |category| %>
@@ -22,6 +23,9 @@
       <% LineItem.months.last(3).each do |month| %>
         <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
       <% end %>
+
+      <td><%= category.variation(range) %>%</td>
     </tr>
   <% end %>
+
 </table>

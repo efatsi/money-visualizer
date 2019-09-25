@@ -3,15 +3,32 @@ class Category < ApplicationRecord
 
   scope :expenses, -> { where.not(name: ["Mortgage", "Income", "Reimbursements"]) }
 
-  def average(range = 12)
-    range ||= 12
-
-    months = LineItem.months.last(range.to_i)
-
-    set = months.map do |month|
-      line_items.where(month_year: month).sum(&:amount)
-    end
+  def average(range)
+    range = (range || 12).to_i
+    set = gather_all(range)
 
     (set.sum / set.count).round(2)
+  end
+
+  def variation(range)
+    (std_dev(range) / average(range) * 100).round.abs
+  end
+
+  def std_dev(range)
+    range = (range || 12).to_i
+    set = gather_all(range)
+
+    mean = (set.sum / set.count)
+    sum = set.inject(0) {|accum, i| accum +(i-mean)**2 }
+    sample_variance = sum/(range - 1).to_f
+    Math.sqrt(sample_variance).round(2)
+  end
+
+  def gather_all(range)
+    months = LineItem.months.last(range)
+
+    months.map do |month|
+      line_items.where(month_year: month).sum(&:amount)
+    end
   end
 end
