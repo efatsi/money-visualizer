@@ -16,7 +16,7 @@
     <td>Variation</td>
   </tr>
 
-  <% Category.expenses.each do |category| %>
+  <% Category.all.each do |category| %>
     <tr>
       <td><%= link_to(category.name || "Unknown", category) %></td>
       <td><%= category.average(range).abs %></td>

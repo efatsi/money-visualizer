@@ -11,7 +11,7 @@ class LineItem < ApplicationRecord
 
   attr_accessor :category_name
 
-  before_save :set_month_year
+  before_validation :set_month_year
 
   def self.months
     LineItem.pluck(:month_year).uniq.sort_by do |dm|

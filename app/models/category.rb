@@ -12,6 +12,8 @@ class Category < ApplicationRecord
 
   def variation(range)
     (std_dev(range) / average(range) * 100).round.abs
+  rescue
+    0
   end
 
   def std_dev(range)

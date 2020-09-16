@@ -3,6 +3,8 @@
 <br>
 <br>
 
+<h2><%= category.name %></h2>
+
 <div>Average Range</div>
 <ul style="margin: 0; padding: 2px 17px;">
   <li><%= link_to "12 month", range: 12 %></li>
@@ -22,7 +24,7 @@
     <td><%= category.variation(range) %>%</td>
   </tr>
 
-  <% LineItem.months.reverse.each do |month| %>
+  <% LineItem.months.last(range).each do |month| %>
     <tr>
       <td><%= month %></td>
       <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
