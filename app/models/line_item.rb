@@ -28,7 +28,7 @@ class LineItem < ApplicationRecord
 
   def self.gather_all(range)
     months.last(range).map do |month|
-      self.where(month_year: month).sum(&:amount)
+      self.charges.where(month_year: month).sum(&:amount)
     end
   end
 

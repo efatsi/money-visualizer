@@ -5,6 +5,12 @@ class Category < ApplicationRecord
 
   validates :name, presence: true
 
+  def self.for_dashboard(range)
+    [find_by(name: "Income")] + self.where.not(name: "Income").sort_by do |category|
+      category.gather_all(range).sum.abs
+    end.reverse
+  end
+
   def to_s
     name
   end

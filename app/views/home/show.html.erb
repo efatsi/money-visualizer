@@ -9,30 +9,38 @@
 <table>
   <tr style="font-weight:bold;">
     <td>Category</td>
-    <td>Average</td>
-    <% LineItem.months.last(3).each do |month| %>
+    <% LineItem.months.last(range).each do |month| %>
       <td><%= month %></td>
     <% end %>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>Average</td>
     <td>Variation</td>
   </tr>
 
   <tr>
     <td>Total</td>
-    <td><%= LineItem.average(range).abs %></td>
-    <% LineItem.months.last(3).each do |month| %>
+    <% LineItem.months.last(range).each do |month| %>
       <td><%= LineItem.charges.where(month_year: month).sum(:amount).abs %></td>
     <% end %>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><%= LineItem.average(range).abs %></td>
     <td><%= LineItem.variation(range) %>%</td>
   </tr>
 
-  <% Category.all.each do |category| %>
+  <% Category.for_dashboard(range).each do |category| %>
     <tr>
       <td><%= link_to(category.name || "Unknown", category) %></td>
-      <td><%= category.average(range).abs %></td>
-      <% LineItem.months.last(3).each do |month| %>
+      <% LineItem.months.last(range).each do |month| %>
         <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
       <% end %>
-
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><%= category.average(range).abs %></td>
       <td><%= category.variation(range) %>%</td>
     </tr>
   <% end %>
