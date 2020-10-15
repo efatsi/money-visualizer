@@ -3,6 +3,12 @@ class Category < ApplicationRecord
 
   scope :expenses, -> { where.not(name: ["Mortgage", "Income", "Reimbursements"]) }
 
+  validates :name, presence: true
+
+  def to_s
+    name
+  end
+
   def average(range)
     range = (range || 12).to_i
     set = gather_all(range)

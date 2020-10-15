@@ -1,0 +1,48 @@
+<h1>
+  <%= month %>
+  <% if category %>
+    (<%= category %>)
+  <% end %>
+</h1>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Amount</th>
+    <th>Source</th>
+
+    <% if !category %>
+      <th>Category</th>
+    <% end %>
+  </tr>
+
+  <% line_items.each_with_index do |line_item, index| %>
+    <tr>
+      <td><%= line_item.date %></td>
+      <td><%= line_item.title %></td>
+      <td><%= number_to_currency line_item.amount %></td>
+      <td><%= line_item.source %></td>
+
+      <% if !category %>
+        <td><%= line_item.category %></td>
+      <% end %>
+    </tr>
+
+
+    <%# Add a bunch of whitespace for "weeks" %>
+    <% if line_items[index + 1] && (
+      line_item.weekday_integer > line_items[index + 1].weekday_integer ||
+      (line_items[index + 1].date - line_item.date).days >= 7.days
+    ) %>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+    <% end %>
+  <% end %>
+</table>

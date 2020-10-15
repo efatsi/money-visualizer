@@ -26,7 +26,7 @@
 
   <% LineItem.months.last(range).each do |month| %>
     <tr>
-      <td><%= month %></td>
+      <td><%= link_to month, month_path(month: month, category_id: category.id) %></td>
       <td><%= category.line_items.where(month_year: month).sum(:amount).abs %></td>
     </tr>
   <% end %>

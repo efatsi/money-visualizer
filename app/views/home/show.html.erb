@@ -7,13 +7,22 @@
 <%= column_chart(chart_data)%>
 
 <table>
-  <tr>
+  <tr style="font-weight:bold;">
     <td>Category</td>
     <td>Average</td>
     <% LineItem.months.last(3).each do |month| %>
       <td><%= month %></td>
     <% end %>
     <td>Variation</td>
+  </tr>
+
+  <tr>
+    <td>Total</td>
+    <td><%= LineItem.average(range).abs %></td>
+    <% LineItem.months.last(3).each do |month| %>
+      <td><%= LineItem.charges.where(month_year: month).sum(:amount).abs %></td>
+    <% end %>
+    <td><%= LineItem.variation(range) %>%</td>
   </tr>
 
   <% Category.all.each do |category| %>
